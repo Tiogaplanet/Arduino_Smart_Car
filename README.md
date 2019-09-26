@@ -1,6 +1,8 @@
 # Arduino Smart Car
 An Arduino IDE library for the two-wheeled Arduino robot chassis sold by VKmaker.
 
+![Two-wheeled Arduino-based robot by VKmaker](https://github.com/Tiogaplanet/Arduino_Smart_Car/raw/master/images/VKmaker02.jpg)
+
 There are many inexpensive robot kits available based on the Arduino Uno.  This project shares my experiences in building and coding the two-wheeled kit sold by VKmaker.
 
 While the kit contains almost everything you need to build a working robot, I strongly recommend you also buy and install a pair of LM393-based speed sensors.  Otherwise, it's going to be quite a challenge to keep the robot driving straight.  This project assumes the LM393 speed sensors are installed.
