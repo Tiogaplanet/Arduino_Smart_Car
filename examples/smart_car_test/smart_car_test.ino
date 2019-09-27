@@ -10,8 +10,7 @@
   http://dronebotworkshop.com
 */
 
-#include <NewPing.h>
-#include <Servo.h>
+#include <arduino_smart_car.h>
 
 // Setup the ultrasonic sensor.
 #define TRIGGER_PIN  4
