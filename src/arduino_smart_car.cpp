@@ -1,6 +1,7 @@
 #include "arduino_smart_car.h"
 
 
+
 // Setup the pins to connect the Arduino to the devices on the robot.
 #define AR_LEFT_MOTOR_INTERRUPT        2
 #define AR_RIGHT_MOTOR_INTERRUPT       3
@@ -14,6 +15,9 @@
 #define AR_RIGHT_MOTOR_ENABLE_PIN      11 // enB
 #define AR_SERVO_PIN                   12
 
+// Set the maximum distance for the ultrasonic sensor.
+#define ULTRASONIC_MAX_DISTANCE 200
+
 // Define serial baud rate.
 #define BAUD_RATE 9600
 
@@ -21,8 +25,7 @@
 #define WHEEL_DIAMETER 6610
 #define DISTANCE_DIVISOR 1000
 
-// Set the maximum distance for the ultrasonic sensor.
-#define ULTRASONIC_MAX_DISTANCE 200
+
 
 // Define an assert mechanism that can be used to log and halt when the user is found to be calling the API incorrectly.
 #define ROBOT_ASSERT(EXPRESSION) if (!(EXPRESSION)) robotAssert(__LINE__);
@@ -82,8 +85,6 @@ void SmartCar::begin()
     // Attach the interrupts for the speed sensors to their respective ISRs.
     attachInterrupt(digitalPinToInterrupt (AR_LEFT_MOTOR_INTERRUPT), ISR_countA, RISING);  // Increase counter A when speed sensor pin goes High
     attachInterrupt(digitalPinToInterrupt (AR_RIGHT_MOTOR_INTERRUPT), ISR_countB, RISING);  // Increase counter B when speed sensor pin goes High
-
-    NewPing DistanceSensor(AR_ULTRASONIC_TRIGGER_PIN, AR_ULTRASONIC_ECHO_PIN, ULTRASONIC_MAX_DISTANCE);
 }
 
 void SmartCar::turnHead(uint8_t angle)
@@ -96,17 +97,16 @@ uint32_t SmartCar::readHeadAngle()
     return m_Servo.read();
 }
 
-void SmartCar::stop()
+uint32_t SmartCar::ping()
 {
-    digitalWrite(AR_LEFT_MOTOR_INPUT_ONE_PIN, LOW);
-    digitalWrite(AR_LEFT_MOTOR_INPUT_TWO_PIN, LOW);
-    digitalWrite(AR_RIGHT_MOTOR_INPUT_THREE_PIN, LOW);
-    digitalWrite(AR_RIGHT_MOTOR_INPUT_FOUR_PIN, LOW);
+	return m_Sonar->ping_cm();
 }
 
-void SmartCar::clear()
+uint32_t SmartCar::turnHeadAndPing(uint8_t angle)
 {
-
+	turnHead(angle);
+	delay(500);
+	return m_Sonar->ping_cm();
 }
 
 // Function to drive forward.
@@ -260,6 +260,19 @@ void SmartCar::turnRight(uint32_t distance, int mspeed)
   analogWrite(AR_RIGHT_MOTOR_ENABLE_PIN, 0);
   counter_A = 0;  //  reset counter A to zero
   counter_B = 0;  //  reset counter B to zero
+}
+
+void SmartCar::stop()
+{
+    digitalWrite(AR_LEFT_MOTOR_INPUT_ONE_PIN, LOW);
+    digitalWrite(AR_LEFT_MOTOR_INPUT_TWO_PIN, LOW);
+    digitalWrite(AR_RIGHT_MOTOR_INPUT_THREE_PIN, LOW);
+    digitalWrite(AR_RIGHT_MOTOR_INPUT_FOUR_PIN, LOW);
+}
+
+void SmartCar::clear()
+{
+    m_Sonar = new NewPing(AR_ULTRASONIC_TRIGGER_PIN, AR_ULTRASONIC_ECHO_PIN, ULTRASONIC_MAX_DISTANCE);
 }
 
 // Function to convert from centimeters to slots in the rotary encoders.
