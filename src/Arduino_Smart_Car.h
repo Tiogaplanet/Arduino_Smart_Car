@@ -39,11 +39,11 @@ public:
     // Servo and ultrasonic operations.
     void turnHead(uint8_t angle);
     uint32_t readHeadAngle();
-	uint32_t ping();
-	
-	// Servo and ultrasonic combinations.
-	uint32_t turnHeadAndPing(uint8_t angle);
-	
+    uint32_t ping();
+
+    // Servo and ultrasonic combinations.
+    uint32_t turnHeadAndPing(uint8_t angle);
+
     // Movement operations.
     void driveForward(uint32_t distance, int mspeed);
     void driveBackward(uint32_t distance, int mspeed);
