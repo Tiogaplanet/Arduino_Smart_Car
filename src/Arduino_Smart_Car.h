@@ -18,13 +18,21 @@
 #include <NewPing.h>
 #include <Servo.h>
 
-// A few defined servo angles.
-#define CENTER 90
-#define RIGHT  1
-#define LEFT   180
+// Are the speed sensors installed?  If not, comment this definition.
+//#define SPEED_SENSORS_INSTALLED
 
-// This number may need to be changed if your encoder has a different number of slots.
-#define SPEED_ENCODER_SLOTS 20
+// A few defines for servo angles.
+#define SWEEP_CENTER 96 // Play with this value to account for slightly off-center hardware assembly.
+#define SWEEP_RIGHT  SWEEP_CENTER - 90
+#define SWEEP_LEFT   SWEEP_CENTER + 90
+
+// Let's setup a few "standard" speeds for each motor.  These are pulse width modulation (PWM) values.
+#define SPEED_STOP    0
+#define SPEED_STALL  70
+#define SPEED_SLOW   80
+#define SPEED_FAST  163
+#define SPEED_PLAID 255
+
 
 
 class SmartCar
@@ -38,22 +46,34 @@ public:
 
     // Servo and ultrasonic operations.
     void turnHead(uint8_t angle);
-    uint32_t readHeadAngle();
-    uint32_t ping();
-
-    // Servo and ultrasonic combinations.
-    uint32_t turnHeadAndPing(uint8_t angle);
+    uint8_t readHeadAngle();
+    int ping();
+    int turnHeadAndPing(uint8_t angle);
 
     // Movement operations.
-    void driveForward(uint32_t distance, int mspeed);
-    void driveBackward(uint32_t distance, int mspeed);
-    void turnLeft(uint32_t distance, int mspeed);
-    void turnRight(uint32_t distance, int mspeed);
+    void driveForward(uint8_t mspeed);
+    void driveBackward(uint8_t mspeed);
+    void driveForwardTime(uint32_t time, uint8_t mspeed);
+    void driveBackwardTime(uint32_t time, uint8_t mspeed);
+    void turnLeftTime(uint32_t time, uint8_t mspeed);
+    void turnRightTime(uint32_t time, uint8_t mspeed);
+#ifdef SPEED_SENSORS_INSTALLED
+    void driveForwardDistance(uint32_t distance, uint8_t mspeed);
+    void driveBackwardDistance(uint32_t distance, uint8_t mspeed);
+    void turnLeftDegrees(uint32_t degrees, uint8_t mspeed);
+    void turnRightDegrees(uint32_t degrees, uint8_t mspeed);
+#endif
     void stop();
 
 protected:
     void clear();
     int cmToSlots(float cm);
+    int degreesToSlots(uint32_t degrees);
+    void setForward();
+    void setBackward();
+    void setLeft();
+    void setRight();
+    void drive(uint8_t leftSpeed, uint8_t rightSpeed);
 
     Servo m_Servo;
     NewPing *m_Sonar;
