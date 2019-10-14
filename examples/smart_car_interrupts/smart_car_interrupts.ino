@@ -16,10 +16,10 @@
     turnHead()
     turnHeadAndPing()
     ping()
-    driveForward()
-    driveBackwardTime()
-    turnRightTime()
-    turnLeftTime()
+    driveForwardDistance()
+    driveBackwardDistance()
+    turnRightDegrees()
+    turnLeftDegrees()
     stop()
 */
 #include <arduino_smart_car.h>
@@ -44,7 +44,7 @@ void loop()
   {
     car.stop();
     delay(300);
-    car.driveBackwardTime(550, SPEED_SLOW);
+    car.driveBackwardDistance(10, SPEED_SLOW);
     delay(300);
     distanceRight = car.turnHeadAndPing(SWEEP_RIGHT);
     car.turnHead(SWEEP_CENTER);
@@ -55,18 +55,18 @@ void loop()
 
     if (distanceRight >= distanceLeft)
     {
-      car.turnRightTime(550, SPEED_SLOW);
+      car.turnRightDegrees(80, SPEED_SLOW);
       car.stop();
     }
     else
     {
-      car.turnLeftTime(550, SPEED_SLOW);
+      car.turnLeftDegrees(80, SPEED_SLOW);
       car.stop();
     }
 
   }
   else
   {
-    car.driveForward(SPEED_SLOW);
+    car.driveForwardDistance(15, SPEED_SLOW);
   }
 }

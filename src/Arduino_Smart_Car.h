@@ -12,6 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+/* This header file describes the public API that an application can use to communicate with the
+   robot.
+*/
 #ifndef Arduino_Smart_Car_h
 #define Arduino_Smart_Car_h
 
@@ -19,7 +22,7 @@
 #include <Servo.h>
 
 // Are the speed sensors installed?  If not, comment this definition.
-//#define SPEED_SENSORS_INSTALLED
+// #define SPEED_SENSORS_INSTALLED
 
 // A few defines for servo angles.
 #define SWEEP_CENTER 96 // Play with this value to account for slightly off-center hardware assembly.
@@ -33,8 +36,6 @@
 #define SPEED_FAST  163
 #define SPEED_PLAID 255
 
-
-
 class SmartCar
 {
 public:
@@ -43,6 +44,7 @@ public:
     ~SmartCar();
 
     void begin();
+    void end();
 
     // Servo and ultrasonic operations.
     void turnHead(uint8_t angle);
@@ -67,16 +69,16 @@ public:
 
 protected:
     void clear();
-    int cmToSlots(float cm);
-    int degreesToSlots(uint32_t degrees);
+    int  cmToSlots(float cm);
+    int  degreesToSlots(uint32_t degrees);
     void setForward();
     void setBackward();
     void setLeft();
     void setRight();
     void drive(uint8_t leftSpeed, uint8_t rightSpeed);
 
-    Servo m_Servo;
-    NewPing *m_Sonar;
+    Servo   m_servo;
+    NewPing *m_sonar;
 };
 
-#endif
+#endif // ARDUINO_SMART_CAR_H
