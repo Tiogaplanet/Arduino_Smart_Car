@@ -45,7 +45,7 @@
 
 // Setup some metrics for accurate distance tracking.
 #define WHEEL_DIAMETER 6610    // Actual wheel diameter is 6.61 centimeters.
-#define HALF_AXLE_TRACK 750    // Actual axle track is 15 centimeters
+#define HALF_AXLE_TRACK 7000   // Actual axle track is 14 centimeters
 #define SPEED_ENCODER_SLOTS 20
 #define DISTANCE_DIVISOR 1000
 
@@ -228,7 +228,7 @@ void SmartCar::turnRightTime(uint32_t time, uint8_t mspeed)
 
 #ifdef SPEED_SENSORS_INSTALLED
 // Drive forward a specified distance.
-void SmartCar::driveForwardDistance(uint32_t distance, int mspeed)
+void SmartCar::driveForwardDistance(uint32_t distance, uint8_t mspeed)
 {
     setForward();
 
@@ -267,7 +267,7 @@ void SmartCar::driveForwardDistance(uint32_t distance, int mspeed)
 }
 
 // Drive backward a specified distance.
-void SmartCar::driveBackwardDistance(uint32_t distance, int mspeed)
+void SmartCar::driveBackwardDistance(uint32_t distance, uint8_t mspeed)
 {
     setBackward();
 
@@ -306,7 +306,7 @@ void SmartCar::driveBackwardDistance(uint32_t distance, int mspeed)
 }
 
 // Turn left a number of degrees.
-void SmartCar::turnLeftDegrees(uint32_t degrees, int mspeed)
+void SmartCar::turnLeftDegrees(uint32_t degrees, uint8_t mspeed)
 {
     // Reset both counters to zero.
     counter_A = 0;
@@ -345,7 +345,7 @@ void SmartCar::turnLeftDegrees(uint32_t degrees, int mspeed)
 }
 
 // Turn right a number of degrees.
-void SmartCar::turnRightDegrees(uint32_t degrees, int mspeed)
+void SmartCar::turnRightDegrees(uint32_t degrees, uint8_t mspeed)
 {
     setRight();
 
@@ -419,7 +419,9 @@ int SmartCar::cmToSlots(float cm)
 int SmartCar::degreesToSlots(uint32_t degrees)
 {
   // Use the formula for the arc of a circle to determine the distance to spin.
-  return cmToSlots(2 * PI * HALF_AXLE_TRACK * (degrees / 360));
+  float arcLength = 2 * PI * (float)(HALF_AXLE_TRACK / DISTANCE_DIVISOR ) * ((float)degrees / 360);
+
+  return cmToSlots(arcLength);
 }
 
 // This internal protected method sets the motor controller to drive both motors forward.

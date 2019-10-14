@@ -22,7 +22,7 @@
 #include <Servo.h>
 
 // Are the speed sensors installed?  If not, comment this definition.
-//#define SPEED_SENSORS_INSTALLED
+// #define SPEED_SENSORS_INSTALLED
 
 // A few defines for servo angles.
 #define SWEEP_CENTER 96 // Play with this value to account for slightly off-center hardware assembly.
